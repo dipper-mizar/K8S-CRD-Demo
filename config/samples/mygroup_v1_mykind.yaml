@@ -1,0 +1,7 @@
+apiVersion: mygroup.ips.com.cn/v1
+kind: Mykind
+metadata:
+  name: mykind-sample
+spec:
+  # Add fields here
+  foo: bar

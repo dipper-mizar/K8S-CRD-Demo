@@ -1,0 +1,17 @@
+apiVersion: mygroup.ips.com.cn/v1
+kind: Mykind
+metadata:                       
+  name: mykind-sample
+spec:
+  replicas_mysql: 1
+  image_mysql: mysql:5.7
+  port_mysql: 3306
+  nodeport_mysql: 30306
+  envs_mysql:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "123456"
+
+  replicas_cov: 1
+  image_cov: cov_app:v1
+  port_cov: 5000
+  nodeport_cov: 30500

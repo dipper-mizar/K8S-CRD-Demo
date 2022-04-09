@@ -1,0 +1,37 @@
+package controllers
+
+import (
+	"context"
+
+	"github.com/go-logr/logr"
+	"k8s.io/apimachinery/pkg/runtime"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	mygroupv1 "K8S-CRD-Demo/api/v1"
+)
+
+// MykindReconciler reconciles a Mykind object
+type MykindReconciler struct {
+	client.Client
+	Log    logr.Logger
+	Scheme *runtime.Scheme
+}
+
+// +kubebuilder:rbac:groups=mygroup.ips.com.cn,resources=mykinds,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=mygroup.ips.com.cn,resources=mykinds/status,verbs=get;update;patch
+
+func (r *MykindReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
+	_ = context.Background()
+	_ = r.Log.WithValues("mykind", req.NamespacedName)
+
+	// your logic here
+
+	return ctrl.Result{}, nil
+}
+
+func (r *MykindReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&mygroupv1.Mykind{}).
+		Complete(r)
+}
