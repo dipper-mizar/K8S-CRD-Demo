@@ -106,29 +106,6 @@ func NewDeploy(owner *mygroupv1.Mykind, logger logr.Logger, scheme *runtime.Sche
 // NewService create a new service object
 func NewService(owner *mygroupv1.Mykind, logger logr.Logger, scheme *runtime.Scheme) map[string]*corev1.Service {
 	originOwnerName := owner.Name
-	srvMySQL := &corev1.Service{
-		TypeMeta: metav1.TypeMeta{
-			Kind:       "Service",
-			APIVersion: "v1",
-		},
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      originOwnerName + "-mysql",
-			Namespace: owner.Namespace,
-		},
-		Spec: corev1.ServiceSpec{
-			Ports: []corev1.ServicePort{{Port: owner.Spec.PortMySQL, NodePort: owner.Spec.NodeportMySQL}},
-			Selector: map[string]string{
-				"app": originOwnerName + "-mysql",
-			},
-			Type: corev1.ServiceTypeNodePort,
-		},
-	}
-	// add ControllerReference for service
-	if err := controllerutil.SetControllerReference(owner, srvMySQL, scheme); err != nil {
-		msg := fmt.Sprintf("***setcontrollerReference for Service %s/%s failed!***", owner.Namespace,
-			originOwnerName+"-mysql")
-		logger.Error(err, msg)
-	}
 
 	srvCov := &corev1.Service{
 		TypeMeta: metav1.TypeMeta{
@@ -155,7 +132,6 @@ func NewService(owner *mygroupv1.Mykind, logger logr.Logger, scheme *runtime.Sch
 	}
 	serviceMap := map[string]*corev1.Service{}
 	serviceMap["Cov"] = srvCov
-	serviceMap["MySQL"] = srvMySQL
 	return serviceMap
 }
 
