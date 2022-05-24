@@ -164,6 +164,7 @@ func (r *MykindReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	oldDeploy := &appsv1.Deployment{}
 	newDeploy := NewDeploy(mycrd_instance, lgr, r.Scheme)
 	for _, deploy := range newDeploy {
+		req.NamespacedName.Name = deploy.ObjectMeta.Name
 		if err := r.Get(ctx, req.NamespacedName, oldDeploy); err != nil && errors.IsNotFound(err) {
 			lgr.Info("---Creating deploy---")
 			// 1. create Deploy
